@@ -1,0 +1,5 @@
+HUBOT_IRC_SERVER=chat.freenode.net \
+HUBOT_IRC_ROOMS="#furaha" \
+HUBOT_IRC_NICK="furahabot" \
+HUBOT_IRC_UNFLOOD="true" \
+bin/hubot -a irc --name furahabot
