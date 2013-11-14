@@ -8,7 +8,7 @@
   "news.coffee",
   "redis-brain.coffee",
   "ruby_rules.coffee",
-  "scrumnotes.coffee",
   "shipit.coffee",
+  "reload.coffee",
   "tasks.coffee"
   ]
