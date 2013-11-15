@@ -50,7 +50,8 @@ module.exports = (robot) ->
 
 
   robot.hear /^notes$/i, (msg) ->
-    msg.send Util.inspect(robot.brain.data.didNotes, false, 4)
+    msg.send Util.inspect(robot.brain.data.didNotes[getDate()], false, 4)
+
 
 
 #  # rooms where hubot is hearing for notes
