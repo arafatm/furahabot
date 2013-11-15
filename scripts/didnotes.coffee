@@ -46,7 +46,7 @@ module.exports = (robot) ->
     
 
     robot.brain.emit 'save'
-    msg.send Util.inspect(robot.brain.data.didNotes, false, 4)
+    #msg.send Util.inspect(robot.brain.data.didNotes, false, 4)
 
 
   robot.hear /^notes$/i, (msg) ->
