@@ -6,9 +6,10 @@
 #   None
 #
 # Commands:
-#   did: something
-#   doing: something else
-#   notes - show all saved notes
+#   did: stuff i completed
+#   will: do the next step
+#   notes - show all saved notes for today
+#   notes 'YYYY-MM-DD'
 #
 # Author:
 #   Arafat Mohamed
@@ -30,7 +31,10 @@ module.exports = (robot) ->
       mm='0'+mm
     return yyyy+'-'+mm+'-'+dd
 
-  robot.hear /^(did|doing): (.+)/i, (msg) ->
+  robot.hear /^doing: (.+)/i, (msg) ->
+    msg.reply "doing has been changed to will. Try 'will: ...'"
+
+  robot.hear /^(did|will): (.+)/i, (msg) ->
     today = getDate()
     user = msg.message.user.name
     key = msg.match[1]
@@ -42,18 +46,91 @@ module.exports = (robot) ->
     notes[user]       ?= {}
     notes[user][key]  ?= []
     notes[user][key].push(note)
-    msg.send "I heard #{user} #{key} #{note}"
-    
+    msg.reply "You #{key} #{note}"
 
     robot.brain.emit 'save'
-    #msg.send Util.inspect(robot.brain.data.didNotes, false, 4)
-
 
   robot.hear /^notes$/i, (msg) ->
-    msg.send Util.inspect(robot.brain.data.didNotes[getDate()], false, 4)
+    didNotes = robot.brain.data.didNotes?[getDate()]
 
+    if didNotes?
+      response = []
+      for own user, notes of didNotes
+        response.push(user, ' -----\n')
+        if notes['did']
+          response.push('  DID:\n')
+          for did in notes['did']
+            response.push('    - ', did, '\n')
+        if notes['will']
+          response.push('  WILL:\n')
+          for will in notes['will']
+            response.push('    - ', will, '\n')
 
+      msg.send response.join('')
+    else
+      msg.reply "No notes taken today. Try 'notes YYYY-MM-DD'"
 
+  robot.hear /^notes (.+)/i, (msg) ->
+    date = msg.match[1]
+    didNotes = robot.brain.data.didNotes?[date]
+
+    if didNotes?
+      response = []
+      response.push("Notes for #{date}\n")
+
+      for own user, notes of didNotes
+        response.push(user, ' -----\n')
+        if notes['did']
+          response.push('  DID:\n')
+          for did in notes['did']
+            response.push('    - ', did, '\n')
+        if notes['will']
+          response.push('  WILL:\n')
+          for will in notes['will']
+            response.push('    - ', will, '\n')
+        if notes['doing']
+          response.push('  DOING:\n')
+          for will in notes['doing']
+            response.push('    - ', will, '\n')
+
+      msg.send response.join('')
+    else
+      msg.reply "No notes taken on #{date}"
+
+#      # build a pretty version
+#      response = []
+#      for own user, userNotes of notes
+#        if user != '_raw'
+#          response.push(user, ':\n')
+#          for key in messageKeys
+#            if userNotes[key]
+#              response.push('  ', key, ': ', userNotes[key].join(', '), '\n')
+#
+#      msg.reply(response.join(''))
+
+# Description:
+# # Take notes on scrum daily meetings
+# #
+# # Dependencies:
+# # None
+# #
+# # Configuration:
+# # HUBOT_SCRUMNOTES_PATH - if set, folder where daily notes should be saved as json files (otherwise they just stay on robot brain)
+# #
+# # Commands:
+# # hubot take scrum notes - Starts taking notes from all users in the room (records all messages starting with yesterday, today, tomorrow, sun, mon, tue, wed, thu, fri, sat, blocking)
+# # hubot stop taking notes - Stops taking scrum notes (if a path is configured saves day notes to a json file)
+# # hubot scrum notes - shows scrum notes taken so far
+# # hubot are you taking notes? - hubot indicates if he's currently taking notes
+# #
+# # Author:
+# # benjamin eidelman
+#
+# env = process.env
+# fs = require('fs')
+#
+# module.exports = (robot) ->
+#   
 #  # rooms where hubot is hearing for notes
 #  hearingRooms = {}
 #  messageKeys = ['blocking', 'blocker', 'yesterday', 'today', 'tomorrow', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
