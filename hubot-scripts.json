@@ -10,5 +10,6 @@
   "ruby_rules.coffee",
   "shipit.coffee",
   "reload.coffee",
-  "tasks.coffee"
+  "tasks.coffee",
+  "wikipedia.coffee"
   ]
