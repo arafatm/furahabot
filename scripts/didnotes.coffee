@@ -6,11 +6,11 @@
 #   None
 #
 # Commands:
-#   did:  ... - capture 'did' for today
-#   will: ... - capture 'will' for today
-#   notes     - show my saved notes for today
-#   notes all - show all saves notes for today
-#   notes 'YYYY-MM-DD' - show notes on 'YYYY-MM-DD'
+#   note I did:  ...      - capture 'did' for today
+#   note I will: ...      - capture 'will' for today
+#   notes                 - show my saved notes for today
+#   notes all             - show all saves notes for today
+#   notes 'YYYY-MM-DD'    - show notes on 'YYYY-MM-DD'
 #
 # Author:
 #   Arafat Mohamed
@@ -32,16 +32,18 @@ module.exports = (robot) ->
       mm='0'+mm
     return yyyy+'-'+mm+'-'+dd
 
-  noteOutput = (user, notes, response) ->
-    false
-
-  robot.hear /^doing: (.+)/i, (msg) ->
-    msg.reply "doing has been changed to will. Try 'will: ...'"
+  robot.respond /badger/i, (msg) ->
+    msg.reply "We don't need no stinkin badgers"
 
   robot.hear /^(did|will): (.+)/, (msg) ->
+    msg.reply "The syntax has changed."
+    msg.reply "Try '#{robot.name}: note I did ...'"
+    msg.reply "Type '#{robot.name}: help note' for other changes"
+
+  robot.respond /note I (did|will) (.+)/i, (msg) ->
     today = getDate()
     user = msg.message.user.name
-    key = msg.match[1]
+    key = msg.match[1].toLowerCase()
     note = msg.match[2]
 
     robot.brain.data.didNotes ?= {}
@@ -55,6 +57,11 @@ module.exports = (robot) ->
     robot.brain.emit 'save'
 
   robot.hear /^notes$/, (msg) ->
+    msg.reply "The syntax has changed."
+    msg.reply "Try '#{robot.name}: notes"
+    msg.reply "Type '#{robot.name}: help note' for other changes"
+
+  robot.respond /notes$/i, (msg) ->
     user = msg.message.user.name
     notes = robot.brain.data.didNotes[getDate()][user]
 
@@ -62,55 +69,52 @@ module.exports = (robot) ->
       if notes['did']?
         for note in notes['did']
           msg.send "#{user} did #{note}"
-      if notes['did']?
+      if notes['will']?
         for note in notes['will']
           msg.send "#{user} will #{note}"
     else
       msg.send "No notes for you!"
 
-  robot.hear /^notes all$/, (msg) ->
-    allnotes = robot.brain.data.didNotes[getDate()]
-    if allnotes?
-      msg.send "Notes taken today:"
-      for own user, notes of allnotes
-        if notes['did']?
-          for note in notes['did']
-            msg.send "- #{user} did #{note}"
-        if notes['did']?
-          for note in notes['will']
-            msg.send "- #{user} will #{note}"
-    else 
-      msg.send "No notes recorded today"
+  robot.hear /^notes (.+)/, (msg) ->
+    msg.reply "The syntax has changed."
+    msg.reply "Try '#{robot.name}: notes YYYY-MM-DD'"
+    msg.reply "Type '#{robot.name}: help note' for other changes"
 
-  robot.hear /^notes (.+)/i, (msg) ->
-    date = msg.match[1]
-    if date is 'all'
-      return
+  # TODO: why won't hubot respond without /i
+  robot.respond /^notes (.+)/i, (msg) ->
+    input = msg.match[1] 
 
-    didNotes = robot.brain.data.didNotes?[date]
+    if input is "all"
+      allnotes = robot.brain.data.didNotes[getDate()]
+      if allnotes?
+        msg.send "Notes taken today:"
+        for own user, notes of allnotes
+          if notes['did']?
+            for note in notes['did']
+              msg.send "- #{user} did #{note}"
+          if notes['did']?
+            for note in notes['will']
+              msg.send "- #{user} will #{note}"
+      else 
+        msg.send "No notes recorded today"
 
-    if didNotes?
-      response = []
-      response.push("Notes for #{date}\n")
-
-      for own user, notes of didNotes
-        response.push(user, ' -----\n')
-        if notes['did']
-          response.push('  DID:\n')
-          for did in notes['did']
-            response.push('    - ', did, '\n')
-        if notes['will']
-          response.push('  WILL:\n')
-          for will in notes['will']
-            response.push('    - ', will, '\n')
-        if notes['doing']
-          response.push('  DOING:\n')
-          for will in notes['doing']
-            response.push('    - ', will, '\n')
-
-      msg.send response.join('')
     else
-      msg.reply "No notes taken on #{date}"
+      didNotes = robot.brain.data.didNotes?[input]
+
+      if didNotes?
+        response = []
+        response.push("Notes for #{input}\n")
+
+        for own user, notes of didNotes
+          if notes['did']?
+            for did in notes['did']
+              response.push("#{user} did #{did}\n")
+          if notes['will']?
+            for will in notes['will']
+              response.push("#{user} will #{will}\n")
+        msg.send response.join('')
+      else
+        msg.reply "No notes taken on #{input}"
 
 #      # build a pretty version
 #      response = []
