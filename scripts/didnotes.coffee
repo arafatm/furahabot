@@ -6,8 +6,8 @@
 #   None
 #
 # Commands:
-#   note I did:  ...      - capture 'did' for today
-#   note I will: ...      - capture 'will' for today
+#   note I did  ...      - capture 'did' for today
+#   note I will ...      - capture 'will' for today
 #   notes                 - show my saved notes for today
 #   notes all             - show all saves notes for today
 #   notes 'YYYY-MM-DD'    - show notes on 'YYYY-MM-DD'
