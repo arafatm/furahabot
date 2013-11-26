@@ -81,38 +81,35 @@ module.exports = (robot) ->
     msg.reply "Type '#{robot.name}: help note' for other changes"
 
   # TODO: why won't hubot respond without /i
-  robot.respond /^notes (.+)/i, (msg) ->
+  robot.respond /notes (.+)/i, (msg) ->
     input = msg.match[1] 
 
     if input is "all"
-      allnotes = robot.brain.data.didNotes[getDate()]
+      allnotes = robot.brain.data.didNotes?[getDate()]
       if allnotes?
         msg.send "Notes taken today:"
         for own user, notes of allnotes
           if notes['did']?
             for note in notes['did']
               msg.send "- #{user} did #{note}"
-          if notes['did']?
+          if notes['will']?
             for note in notes['will']
               msg.send "- #{user} will #{note}"
       else 
         msg.send "No notes recorded today"
 
     else
-      didNotes = robot.brain.data.didNotes?[input]
+      user = msg.message.user.name
+      notes = robot.brain.data.didNotes?[input]?[user]
 
-      if didNotes?
-        response = []
-        response.push("Notes for #{input}\n")
-
-        for own user, notes of didNotes
-          if notes['did']?
-            for did in notes['did']
-              response.push("#{user} did #{did}\n")
-          if notes['will']?
-            for will in notes['will']
-              response.push("#{user} will #{will}\n")
-        msg.send response.join('')
+      if notes?
+        msg.reply("Notes for #{input}\n")
+        if notes['did']?
+          for note in notes['did']
+            msg.reply("#{user} did #{note}\n")
+        if notes['will']?
+          for note in notes['will']
+            msg.reply("#{user} will #{note}\n")
       else
         msg.reply "No notes taken on #{input}"
 
