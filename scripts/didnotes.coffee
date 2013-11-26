@@ -6,10 +6,11 @@
 #   None
 #
 # Commands:
-#   did: stuff i completed
-#   will: do the next step
-#   notes - show all saved notes for today
-#   notes 'YYYY-MM-DD'
+#   did:  ... - capture 'did' for today
+#   will: ... - capture 'will' for today
+#   notes     - show my saved notes for today
+#   notes all - show all saves notes for today
+#   notes 'YYYY-MM-DD' - show notes on 'YYYY-MM-DD'
 #
 # Author:
 #   Arafat Mohamed
@@ -31,10 +32,13 @@ module.exports = (robot) ->
       mm='0'+mm
     return yyyy+'-'+mm+'-'+dd
 
+  noteOutput = (user, notes, response) ->
+    false
+
   robot.hear /^doing: (.+)/i, (msg) ->
     msg.reply "doing has been changed to will. Try 'will: ...'"
 
-  robot.hear /^(did|will): (.+)/i, (msg) ->
+  robot.hear /^(did|will): (.+)/, (msg) ->
     today = getDate()
     user = msg.message.user.name
     key = msg.match[1]
@@ -50,28 +54,39 @@ module.exports = (robot) ->
 
     robot.brain.emit 'save'
 
-  robot.hear /^notes$/i, (msg) ->
-    didNotes = robot.brain.data.didNotes?[getDate()]
+  robot.hear /^notes$/, (msg) ->
+    user = msg.message.user.name
+    notes = robot.brain.data.didNotes[getDate()][user]
 
-    if didNotes?
-      response = []
-      for own user, notes of didNotes
-        response.push(user, ' -----\n')
-        if notes['did']
-          response.push('  DID:\n')
-          for did in notes['did']
-            response.push('    - ', did, '\n')
-        if notes['will']
-          response.push('  WILL:\n')
-          for will in notes['will']
-            response.push('    - ', will, '\n')
-
-      msg.send response.join('')
+    if notes?
+      if notes['did']?
+        for note in notes['did']
+          msg.send "#{user} did #{note}"
+      if notes['did']?
+        for note in notes['will']
+          msg.send "#{user} will #{note}"
     else
-      msg.reply "No notes taken today. Try 'notes YYYY-MM-DD'"
+      msg.send "No notes for you!"
+
+  robot.hear /^notes all$/, (msg) ->
+    allnotes = robot.brain.data.didNotes[getDate()]
+    if allnotes?
+      msg.send "Notes taken today:"
+      for own user, notes of allnotes
+        if notes['did']?
+          for note in notes['did']
+            msg.send "- #{user} did #{note}"
+        if notes['did']?
+          for note in notes['will']
+            msg.send "- #{user} will #{note}"
+    else 
+      msg.send "No notes recorded today"
 
   robot.hear /^notes (.+)/i, (msg) ->
     date = msg.match[1]
+    if date is 'all'
+      return
+
     didNotes = robot.brain.data.didNotes?[date]
 
     if didNotes?
