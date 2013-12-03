@@ -1,0 +1,6 @@
+#HUBOT_LOG_LEVEL="debug" \
+HUBOT_IRC_SERVER=chat.freenode.net \
+HUBOT_IRC_ROOMS="#room1,#room2" \
+HUBOT_IRC_NICK="my_hubot_nick" \
+HUBOT_IRC_UNFLOOD="true" \
+bin/hubot -a irc --name my_hubot_name
