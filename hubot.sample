@@ -1,4 +1,5 @@
 #HUBOT_LOG_LEVEL="debug" \
+HUBOT_AUTH_ADMIN=comma_seperated_list_of_user_ids
 HUBOT_IRC_SERVER=chat.freenode.net \
 HUBOT_IRC_ROOMS="#room1,#room2" \
 HUBOT_IRC_NICK="my_hubot_nick" \
