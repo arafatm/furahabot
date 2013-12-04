@@ -1,6 +1,24 @@
+# Description:
+#   Post stuff to tumblr
+#
+# Dependencies:
+#   "tumblr.js": "*"
+#   "util": "*"
+#
+# Configuration:
+#   TUMBLR_CONSUMER_KEY - Sign up for OAuth on tumblr
+#   TUMBLR_CONSUMER_SECRET - Sign up for OAuth on tumblr
+#   TUMBLR_TOKEN - Sign up for OAuth on tumblr
+#   TUMBLR_TOKEN_SECRET - Sign up for OAuth on tumblr
+#   TUMBLR_BLOG - url for your blog where stuff should be posted
+#
+# Commands:
+#
+# Author:
+#   Arafat Mohamed
+
 tumblr = require("tumblr.js")
 Util = require("util")
-
 
 module.exports = (robot) ->
 
@@ -30,52 +48,18 @@ module.exports = (robot) ->
     token_secret: process.env.TUMBLR_TOKEN_SECRET
   )
 
-
-  robot.respond /yermomma$/i, (msg) ->
-    msg.reply 'yermom'
-    return
-    client.link "furahasoftware.tumblr.com", url: "http://www.yahoo.com", (err, data) ->
-
-      if err?
-        console.log Util.inspect(err, false, 4)
-        return
-      console.log "----- posting URL"
-      console.log Util.inspect(data, false, 4)
-
-# Sample calls I used while learning how this works
-#
-#client.userInfo (err, data) ->
-#  console.log "-----\nerr: #{err}"
-#  console.log "-----\ndata: #{data}"
-#  output = Util.inspect(data, false, 4)
-#  console.log output
-#  console.log "-----\n"
-#  for blog in data.user.blogs
-#    console.log Util.inspect(blog, false, 4)
-#
-#
-#
-#client.blogInfo "furahasoftware.tumblr.com", (err, data) ->
-#  console.log "-----\nfurahasoftware BLOG NAME"
-#  console.log Util.inspect(data.blog.name, false, 4)
-#
-#client.posts "furahasoftware.tumblr.com", (err, data) ->
-#  console.log "-----\n POSTS"
-#  for post in data.posts
-#    console.log Util.inspect(post.url, false, 4)
-#
-#client.text "furahasoftware.tumblr.com", body: "this is text", (err, data) ->
-#  if err?
-#    console.log Util.inspect(err, false, 4)
-#    return
-#  console.log "----- Text posting DATA"
-#  console.log Util.inspect(data, false, 4)
-#
-#client.link "furahasoftware.tumblr.com", url: "http://www.yahoo.com", (err, data) ->
-#
-#  if err?
-#    console.log Util.inspect(err, false, 4)
-#    return
-#  console.log "----- posting URL"
-#  console.log Util.inspect(data, false, 4)
-    
+  robot.hear /.*(https?:\/\/\S*)(.*)?/i, (msg) ->
+    url   = msg.match[1]
+    desc  = msg.match[2]
+    if desc? 
+      client.link blog, url: url, description: desc, (err, data) ->
+        if err?
+          msg.reply "Error posting: Try again :(\n#{Util.inspect(err, false, 4)}"
+        else
+          msg.reply "Posted http://#{blog}/post/#{data.id}"
+    else
+      client.link blog, url: url, (err, data) ->
+        if err?
+          msg.reply "Error posting: Try again :(\n#{Util.inspect(err, false, 4)}"
+        else
+          msg.reply "Posted http://#{blog}/post/#{data.id}"
