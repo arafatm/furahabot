@@ -1,3 +1,5 @@
+# ignore. testing irc hooks
+
 # Furahabot
 
 This is based on [Hubot](https://github.com/github/hubot). It has my personal
