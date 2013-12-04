@@ -48,9 +48,11 @@ module.exports = (robot) ->
     token_secret: process.env.TUMBLR_TOKEN_SECRET
   )
 
-  robot.hear /.*(https?:\/\/\S*)(.*)?/i, (msg) ->
-    url   = msg.match[1]
-    desc  = msg.match[2]
+  robot.hear /(.* )?(.?https?:\/\/\S*)(.*)?/i, (msg) ->
+    url   = msg.match[2]
+    if url[0] != 'h'
+      return
+    desc  = msg.match[3]
     if desc? 
       client.link blog, url: url, description: desc, (err, data) ->
         if err?
