@@ -72,7 +72,7 @@ module.exports = (robot) ->
           handleresponse(msg, err, data, "Imaged")
       else
         client.photo blog, source: url, (err, data) ->
-          handleresponse(msg, err, data), "Imaged"
+          handleresponse(msg, err, data, "Imaged")
     else if desc? 
       client.link blog, url: url, description: desc, (err, data) ->
         handleresponse(msg, err, data, "Linked")
