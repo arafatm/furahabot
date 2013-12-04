@@ -26,21 +26,22 @@ Util = require("util")
 module.exports = (robot) ->
 
   # Check TUMBLR keys are available
+  working = true
   unless process.env.TUMBLR_CONSUMER_KEY?
     robot.logger.warning 'TUMBLR_CONSUMER_KEY environment variable not set'
-    process.exit 0
+    working = false
   unless process.env.TUMBLR_CONSUMER_SECRET?
     robot.logger.warning 'TUMBLR_CONSUMER_SECRET environment variable not set'
-    process.exit 0
+    working = false
   unless process.env.TUMBLR_TOKEN?
     robot.logger.warning 'TUMBLR_TOKEN environment variable not set'
-    process.exit 0
+    working = false
   unless process.env.TUMBLR_TOKEN_SECRET?
     robot.logger.warning 'TUMBLR_TOKEN_SECRET environment variable not set'
-    process.exit 0
+    working = false
   unless process.env.TUMBLR_BLOG?
     robot.logger.warning 'TUMBLR_BLOG environment variable not set'
-    process.exit 0
+    working = false
 
   blog = process.env.TUMBLR_BLOG
 
@@ -59,12 +60,17 @@ module.exports = (robot) ->
 
 
   robot.hear /"(.*)" -- (\w.*)/i, (msg) ->
+    if not working
+      return
+
     quote = msg.match[1]
     source = msg.match[2]
     client.quote blog, quote: quote, source: source, (err, data) ->
       handleresponse(msg, err, data, "Quoted")
 
   robot.hear /(.* )?(.?https?:\/\/\S*)(.*)?/i, (msg) ->
+    if not working
+      return
 
     bait = msg.match[0]
 
@@ -89,3 +95,4 @@ module.exports = (robot) ->
     else
       client.link blog, url: url, (err, data) ->
         handleresponse(msg, err, data, "Linked")
+
