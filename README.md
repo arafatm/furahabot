@@ -1,7 +1,7 @@
 # Furahabot
 
-This is based on Hubot. It has my personal setup for hubot-scripts as well as
-custom scripts.
+This is based on [Hubot](https://github.com/github/hubot). It has my personal
+setup for hubot-scripts as well as custom scripts.
 
 # Hubot
 
