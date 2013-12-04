@@ -48,18 +48,18 @@ module.exports = (robot) ->
     token_secret: process.env.TUMBLR_TOKEN_SECRET
   )
 
-  handleresponse = (msg, err, data) ->
+  handleresponse = (msg, err, data, typed) ->
       if err?
         msg.reply "Error posting: Try again :(\n#{Util.inspect(err, false, 4)}"
       else
-        msg.reply "Quote http://#{blog}/post/#{data.id}"
+        msg.reply "#{typed} http://#{blog}/post/#{data.id}"
 
 
   robot.hear /"(.*)" -- (\w.*)/i, (msg) ->
     quote = msg.match[1]
     source = msg.match[2]
     client.quote blog, quote: quote, source: source, (err, data) ->
-      handleresponse(msg, err, data)
+      handleresponse(msg, err, data, "Quoted")
 
   robot.hear /(.* )?(.?https?:\/\/\S*)(.*)?/i, (msg) ->
     url   = msg.match[2]
@@ -69,13 +69,13 @@ module.exports = (robot) ->
     if /.*(jpg|gif)$/i.test(url)
       if desc?
         client.photo blog, source: url, caption: desc, (err, data) ->
-          handleresponse(msg, err, data)
+          handleresponse(msg, err, data, "Imaged")
       else
         client.photo blog, source: url, (err, data) ->
-          handleresponse(msg, err, data)
+          handleresponse(msg, err, data), "Imaged"
     else if desc? 
       client.link blog, url: url, description: desc, (err, data) ->
-        handleresponse(msg, err, data)
+        handleresponse(msg, err, data), "Linked"
     else
       client.link blog, url: url, (err, data) ->
-        handleresponse(msg, err, data)
+        handleresponse(msg, err, data), "Linked"

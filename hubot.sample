@@ -4,4 +4,9 @@ HUBOT_IRC_SERVER=chat.freenode.net \
 HUBOT_IRC_ROOMS="#room1,#room2" \
 HUBOT_IRC_NICK="my_hubot_nick" \
 HUBOT_IRC_UNFLOOD="true" \
+TUMBLR_CONSUMER_KEY="" \
+TUMBLR_CONSUMER_SECRET="" \
+TUMBLR_TOKEN="" \
+TUMBLR_TOKEN_SECRET="" \
+TUMBLR_BLOG="my_tumble_url" \
 bin/hubot -a irc --name my_hubot_name
