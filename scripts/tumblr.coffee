@@ -13,6 +13,9 @@
 #   TUMBLR_BLOG - url for your blog where stuff should be posted
 #
 # Commands:
+#   http://<url> some description - post link to tumblr with optional description
+#   http://link.to.gif.or.jpg some caption - post image link to tumblr with optional caption
+#   "quote something" -- source attribute to   - post quote to tumblr with source attribution
 #
 # Author:
 #   Arafat Mohamed

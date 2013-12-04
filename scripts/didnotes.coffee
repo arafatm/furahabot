@@ -6,14 +6,14 @@
 #   None
 #
 # Commands:
-#   note I did  ...      - capture 'did' notes for today
-#   note I will ...      - capture 'will' notes for today
-#   notes                - show my saved notes for today
-#   notes all            - show all saves notes for today
-#   notes yesterday      - show my saved notes from yesterday
-#   notes 'MM-DD'        - show notes on '<current year>-MM-DD'
-#   notes 'YYYY-MM-DD'   - show notes on 'YYYY-MM-DD'
-#   notes '<nick>'       - show all notes for <nick>
+#   hubot note I did  ...      - capture 'did' notes for today
+#   hubot note I will ...      - capture 'will' notes for today
+#   hubot notes                - show my saved notes for today
+#   hubot notes all            - show all saves notes for today
+#   hubot notes yesterday      - show my saved notes from yesterday
+#   hubot notes 'MM-DD'        - show notes on '<current year>-MM-DD'
+#   hubot notes 'YYYY-MM-DD'   - show notes on 'YYYY-MM-DD'
+#   hubot notes '<nick>'       - show all notes for <nick>
 #
 # Author:
 #   Arafat Mohamed
