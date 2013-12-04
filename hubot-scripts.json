@@ -5,6 +5,7 @@
   "fortune.coffee",
   "mindkiller.coffee",
   "news.coffee",
+  "octospy.coffee",
   "redis-brain.coffee",
   "ruby_rules.coffee",
   "shipit.coffee",
