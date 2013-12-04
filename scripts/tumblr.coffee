@@ -65,6 +65,13 @@ module.exports = (robot) ->
       handleresponse(msg, err, data, "Quoted")
 
   robot.hear /(.* )?(.?https?:\/\/\S*)(.*)?/i, (msg) ->
+
+    bait = msg.match[0]
+
+    # github irc hook. ignore
+    if /new commits to/.test(bait) or /opened pull request/.test(bait)
+      return
+
     url   = msg.match[2]
     if url[0] != 'h'
       return
