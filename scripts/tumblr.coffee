@@ -75,7 +75,7 @@ module.exports = (robot) ->
     bait = msg.match[0]
 
     # github irc hook. ignore
-    if /new commits to/.test(bait) or /opened pull request/.test(bait)
+    if /new commit(s)? to/.test(bait) or /opened pull request/.test(bait)
       return
 
     url   = msg.match[2]
