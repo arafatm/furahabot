@@ -1,3 +1,7 @@
+# Furahabot
+
+This is based on Hubot. It has my personal setup for hubot-scripts as well as custom scripts.
+
 # Hubot
 
 This is a version of GitHub's Campfire bot, hubot. He's pretty cool.
