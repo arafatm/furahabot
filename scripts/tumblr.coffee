@@ -75,7 +75,7 @@ module.exports = (robot) ->
           handleresponse(msg, err, data), "Imaged"
     else if desc? 
       client.link blog, url: url, description: desc, (err, data) ->
-        handleresponse(msg, err, data), "Linked"
+        handleresponse(msg, err, data, "Linked")
     else
       client.link blog, url: url, (err, data) ->
-        handleresponse(msg, err, data), "Linked"
+        handleresponse(msg, err, data, "Linked")
