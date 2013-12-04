@@ -3,7 +3,6 @@
   "coin.coffee",
   "f-ing-weather.coffee",
   "fortune.coffee",
-  "karma.coffee",
   "mindkiller.coffee",
   "news.coffee",
   "redis-brain.coffee",
