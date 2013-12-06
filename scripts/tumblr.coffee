@@ -82,7 +82,7 @@ module.exports = (robot) ->
     if url[0] != 'h'
       return
     desc  = msg.match[3]
-    if /.*(jpg|gif)$/i.test(url)
+    if /.*(jpg|gif|png)$/i.test(url)
       if desc?
         client.photo blog, source: url, caption: desc, (err, data) ->
           handleresponse(msg, err, data, "Imaged")
