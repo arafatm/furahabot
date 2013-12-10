@@ -56,7 +56,7 @@ module.exports = (robot) ->
       if err?
         msg.reply "Error posting: Try again :(\n#{Util.inspect(err, false, 4)}"
       else
-        msg.reply "#{typed} http://#{blog}/post/#{data.id}"
+        msg.send "#{typed} http://#{blog}/post/#{data.id}"
 
 
   robot.hear /"(.*)" -- (\w.*)/i, (msg) ->
