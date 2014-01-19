@@ -56,13 +56,19 @@ getTable = () ->
         out.send "Got a HTTP/" + res.statusCode
         out.send "Cannot get your standings right now."
 
+      console.log(res.statusCode)
+      console.log(Object.prototype.toString.call(res.statusCode))
+
       result = parseHTML(body, "table#list tr.team")
       
-      table = ["Team            Pt   W   D   L   GD  Leag%    CL%"]
+      console.log(body.length)
+      console.log(result.length)
+
+      table = []
       for item in result
         team = item.children[0].children[0].children[0].data
         team = String(team + "               ").slice(0,14)
-        ply  = item.children[3].children[0].data
+        pts  = String("00" + item.children[3].children[0].data).slice(-2)
         win  = String(" "+item.children[6].children[0].data).slice(-2)
         drw  = String(" "+item.children[8].children[0].data).slice(-2)
         los  = String(" "+item.children[10].children[0].data).slice(-2)
@@ -76,19 +82,21 @@ getTable = () ->
           tit = "     " if tit == "  0.0"
 
         chl = "-----"
-        out.send "x" +  item.children[15].data +  "x"
         if item.children[15].data == "td class=\"pr5\""
           chl = "     "
         else
           chl  = String("     "+item.children[15].children[0].children[0].data).slice(-5)
           chl = "     " if chl == "  0.0"
 
-        row = team + "  " + ply + "  " 
-        row = row + win + "  " + drw + "  " + los + "  "
-        row = row + gld + "  " + tit + "  " + chl
+        row = pts + " " + gld + " " + team
+        row = row + "  " + tit + "  " + chl
+        row = row + "  " + win + "  " + drw + "  " + los
         table.push(row)
 
-      out.send "", table.join("\n")
+      # sort and add header
+      table = table.sort().reverse()
+      table.unshift("Pt  GD                   PL%    CL%   W   D   L")
+      out.send "\n"+table.join("\n")
 
 
   
