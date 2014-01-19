@@ -24,9 +24,6 @@ sys = require('sys')
 out = null
 
 module.exports = (robot) ->
-  robot.hear /prem/i, (msg) ->
-    out = msg
-    getTable("http://www.sportsclubstats.com/England/Premier.html")
   robot.respond /prem/i, (msg) ->
     out = msg
     getTable("http://www.sportsclubstats.com/England/Premier.html")
