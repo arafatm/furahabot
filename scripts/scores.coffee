@@ -70,6 +70,8 @@ getTable = () ->
         drw  = String(" "+item.children[8].children[0].data).slice(-2)
         los  = String(" "+item.children[10].children[0].data).slice(-2)
         gld  = String("  "+item.children[11].children[0].data).slice(-3)
+        pld = Number(win) + Number(drw) + Number(los)
+        pld = String("  " + pld).slice(-2)
         
         tit = "-----"
         if item.children[12].children[0].raw == "No"
@@ -87,16 +89,16 @@ getTable = () ->
 
         row = pts + " " + gld + " " + team
         row = row + "  " + tit + "  " + chl
-        row = row + "  " + win + "  " + drw + "  " + los
+        row = row + "  " + pld + "  " + win + "  " + drw + "  " + los
         table.push(row)
 
       # sort and add header
       table = table.sort().reverse()
-      table.splice(17,0,"-----------------------------------------------")
-      table.splice(5,0,"-----------------------------------------------")
-      table.splice(4,0,"-----------------------------------------------")
-      table.unshift("-----------------------------------------------")
-      table.unshift("Pt  GD                   PL%    CL%   W   D   L")
+      table.splice(17,0,"---------------------------------------------------")
+      table.splice(5,0,"---------------------------------------------------")
+      table.splice(4,0,"---------------------------------------------------")
+      table.unshift("---------------------------------------------------")
+      table.unshift("Pt  GD                   PL%    CL%   P   W   D   L")
       out.send "\n"+table.join("\n")
 
 
