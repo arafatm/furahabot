@@ -69,7 +69,7 @@ getTable = () ->
       table = []
       for item in result
         team = item.children[0].children[0].children[0].data
-        team = String(team + "               ").slice(0,14)
+        team = String(team + "               ").slice(0,7)
         pts  = String("00" + item.children[3].children[0].data).slice(-2)
         win  = String(" "+item.children[6].children[0].data).slice(-2)
         drw  = String(" "+item.children[8].children[0].data).slice(-2)
@@ -103,7 +103,7 @@ getTable = () ->
       table.splice(5,0,"---------------------------------------------------")
       table.splice(4,0,"---------------------------------------------------")
       table.unshift("---------------------------------------------------")
-      table.unshift("Pt  GD                   PL%    CL%   P   W   D   L")
+      table.unshift("Pt  GD            PL%    CL%   P   W   D   L")
       out.send "\n"+table.join("\n")
 
 
