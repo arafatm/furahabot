@@ -92,6 +92,10 @@ getTable = () ->
 
       # sort and add header
       table = table.sort().reverse()
+      table.splice(17,0,"-----------------------------------------------")
+      table.splice(5,0,"-----------------------------------------------")
+      table.splice(4,0,"-----------------------------------------------")
+      table.unshift("-----------------------------------------------")
       table.unshift("Pt  GD                   PL%    CL%   W   D   L")
       out.send "\n"+table.join("\n")
 
