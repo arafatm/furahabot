@@ -24,6 +24,9 @@ sys = require('sys')
 out = null
 
 module.exports = (robot) ->
+  robot.hear /prem/i, (msg) ->
+    out = msg
+    getTable("http://www.sportsclubstats.com/England/Premier.html")
   robot.respond /prem/i, (msg) ->
     out = msg
     getTable("http://www.sportsclubstats.com/England/Premier.html")
@@ -55,17 +58,37 @@ getTable = () ->
 
       result = parseHTML(body, "table#list tr.team")
       
-      table = "\nTeam           Pt    W   D   L\n"
+      table = ["Team            Pt   W   D   L   GD  Leag%    CL%"]
       for item in result
         team = item.children[0].children[0].children[0].data
         team = String(team + "               ").slice(0,14)
-        ply  = item.children[3].children[0].data + "  "
+        ply  = item.children[3].children[0].data
         win  = String(" "+item.children[6].children[0].data).slice(-2)
         drw  = String(" "+item.children[8].children[0].data).slice(-2)
         los  = String(" "+item.children[10].children[0].data).slice(-2)
-        table = table + team + " " + ply + " " + win+"  "+drw+"  "+los+"\n"
+        gld  = String("  "+item.children[11].children[0].data).slice(-3)
+        
+        tit = "-----"
+        if item.children[12].children[0].raw == "No"
+          tit = "     "
+        else
+          tit  = String("     "+item.children[12].children[0].children[0].data).slice(-5)
+          tit = "     " if tit == "  0.0"
 
-      out.send table
+        chl = "-----"
+        out.send "x" +  item.children[15].data +  "x"
+        if item.children[15].data == "td class=\"pr5\""
+          chl = "     "
+        else
+          chl  = String("     "+item.children[15].children[0].children[0].data).slice(-5)
+          chl = "     " if chl == "  0.0"
+
+        row = team + "  " + ply + "  " 
+        row = row + win + "  " + drw + "  " + los + "  "
+        row = row + gld + "  " + tit + "  " + chl
+        table.push(row)
+
+      out.send "", table.join("\n")
 
 
   
