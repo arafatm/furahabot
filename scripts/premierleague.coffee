@@ -1,6 +1,7 @@
 # Description:
-#   How is my team doing.
-#   Currently only supports ManU and Liverpool
+#   1. Display Premier League table
+#   2. How is my team doing. Supported teams are:
+#      manu, manc, arse, pool
 #
 # Dependencies:
 #   "htmlparser": "1.7.6"
@@ -13,13 +14,17 @@
 #
 # Commands:
 #   furahabot <team> - Get results/odds for manu, pool, man, arse, chel
+#   furahabot  prem  - Get Premier League table 
+#
+# Credits:
+#   @stephenyeargin 
+#   https://github.com/websages/crunchy-ng/blob/master/scripts/preds.coffee
 
 _ = require("underscore")
 _s = require("underscore.string")
 Select = require("soupselect").select
 HTMLParser = require "htmlparser"
 inspect = require('util').inspect
-sys = require('sys')
 
 out = null
 
